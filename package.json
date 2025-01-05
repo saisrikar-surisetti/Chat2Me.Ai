@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@azure/core-auth": "^1.9.0",
     "@azure/identity": "^4.5.0",
     "@azure/openai": "^2.0.0",
     "class-variance-authority": "^0.7.1",

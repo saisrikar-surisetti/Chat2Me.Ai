@@ -1,7 +1,7 @@
 'use server'
-
-import { AzureOpenAI } from "openai"
-import { DefaultAzureCredential, getBearerTokenProvider } from "@azure/identity"
+import { AzureKeyCredential } from "@azure/core-auth";
+import OpenAI, { AzureOpenAI } from "openai"
+import { AzureCliCredential, AzureDeveloperCliCredential, DefaultAzureCredential, getBearerTokenProvider } from "@azure/identity"
 
 async function transcript(prevState: any, formData: FormData) {
   console.log("PREVIOUS STATE:", prevState); 
@@ -30,7 +30,29 @@ async function transcript(prevState: any, formData: FormData) {
 
   const arrayBuffer = await file.arrayBuffer();
   const audio = new Uint8Array(arrayBuffer)
-  /
+  
+
+  //get audio transcription
+  console.log("== Transcribe Audio sample ==")
+
+
+  const endpoint = process.env["AZURE_OPENAI_ENDPOINT"] || "<endpoint>";
+  const apiKey = process.env["AZURE_OPENAI_API_KEY"] || "<api key>";
+
+  const client = new AzureOpenAI({ endpoint, apiKey});
+
+  const result = await client.audio.transcriptions.create(
+    process.env.AZURE_DEPOLYMENT_NAME, 
+  )
+
+
+  
+
+
+
+  
+  
+ 
 
 }
 export default transcript;
