@@ -4,6 +4,7 @@ import OpenAI, { AzureOpenAI } from "openai"
 import { AzureCliCredential, AzureDeveloperCliCredential, DefaultAzureCredential, getBearerTokenProvider } from "@azure/identity"
 import { createReadStream } from "fs";
 import { ChatRequestMessage, OpenAIClient } from "@azure/openai";
+import { ChatCompletionCreateParamsNonStreaming } from "openai/resources/index.mjs";
 
 async function transcript(prevState: any, formData: FormData) {
   console.log("PREVIOUS STATE:", prevState); 
@@ -46,32 +47,55 @@ async function transcript(prevState: any, formData: FormData) {
     new AzureKeyCredential(process.env.AZURE_OPENAI_API_KEY)
   );
 
-  const result = await client.getAudioTranscription(
+  const result1 = await client.getAudioTranscription(
     process.env.AZURE_DEPLOYMENT_NAME,
     audio
   );
-  console.log(`Transcription: ${result.text}`);
+  console.log(`Transcription: ${result1.text}`);
+
+  const openai = new OpenAI();
   
-  const messages: ChatRequestMessage[] = [
+  const completion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
 
-  {
-    role: "system",
-    content: "You are a very helpful human assistant. You will answer questions and if you can't reply, you say that you dont know the awnser. "
-  },
-  {role: "user",
-    content: result.text,
-  },
-  ]
+        {
+          role: "system",
+          content: "You are a very helpful human assistant. You will answer questions and if you can't reply, you say that you dont know the awnser. "
+        },
+        {role: "user",
+          content: result1.text,
+        },
+        ],
+  });
+  
+  console.log(completion.choices[0].message);
+//   const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const completions = await client.getChatCompletions(
-  process.env.AZURE_DEPLOYMENT_COMPLETIONS_NAME,
-  messages,
-  {maxTokens: 128}
-)
+// const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
-const response = completions.choices[0].message?.content;
+// const model1 = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+// const prompt ="You are a helpful assitant. Respond to the question and if you cannot respond, say you don't know"
+// const result = await model1.generateContent([prompt, result1.text]);
+// console.log(result.response.text());
+  
+  // const messages: ChatCompletionCreateParamsNonStreaming[] = [
 
-console.log(prevState, "+++", result.text)
+  // {
+  //   role: "system",
+  //   content: "You are a very helpful human assistant. You will answer questions and if you can't reply, you say that you dont know the awnser. "
+  // },
+  // {role: "user",
+  //   content: result.text,
+  // },
+  // ]
+// const depolyName = process.env.AZURE_DEPLOYMENT_COMPLETIONS_NAME
+  
+// const completions = await client.chat.completions.create({ messages, hh, jjj})
+
+// const response = completions.choices[0].message?.content;
+
+// console.log(prevState, "+++", result.text)
 
 
 }
