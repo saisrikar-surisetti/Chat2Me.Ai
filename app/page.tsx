@@ -6,6 +6,7 @@ import Recorder, { mimeType } from "./components/recorder";
 import { useActionState, useRef } from "react";
 import { useFormState } from "react-dom";
 import transcript from "@/app/actions/transcript";
+import { redirect } from "next/navigation";
 
 const initialState = {
   sender: "",
@@ -36,6 +37,10 @@ if (fileRef.current){
 
 }
 }
+
+const clickHandler = ()=> {
+  redirect('/tasks')
+}
   return (  
 
     <div className="bg-black h-screen overflow-y-auto">
@@ -51,6 +56,7 @@ if (fileRef.current){
     <SettingsIcon
     size={40}
     className="p-2 m-2 rounded-full hover:cursor-pointer bg-purple-600 text-black transition-all ease-in-out duration-150 hover:text-white"
+    onClick={clickHandler}
     />
      </header>
      

@@ -55,7 +55,7 @@ async function transcript(prevState: any, formData: FormData) {
 
   const openai = new OpenAI();
   
-  const completion = await openai.chat.completions.create({
+  const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
 
@@ -67,15 +67,16 @@ async function transcript(prevState: any, formData: FormData) {
           content: result1.text,
         },
         ],
+        
   });
   
-  console.log(completion.choices[0].message);
+  console.log(response.choices[0].message);
 //   const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
 // const model1 = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-// const prompt ="You are a helpful assitant. Respond to the question and if you cannot respond, say you don't know"
+// const prompt ="You are a helpful assitant. Respond to the question  and if you cannot respond, say you don't know"
 // const result = await model1.generateContent([prompt, result1.text]);
 // console.log(result.response.text());
   
