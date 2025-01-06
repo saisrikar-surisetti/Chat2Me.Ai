@@ -3,9 +3,9 @@ import Image from "next/image";
 import { SettingsIcon } from "lucide-react";
 import Messages from "./components/messages";
 import Recorder, { mimeType } from "./components/recorder";
-import { useRef } from "react";
+import { useActionState, useRef } from "react";
 import { useFormState } from "react-dom";
-import transcript from "@/actions/transcript";
+import transcript from "@/app/actions/transcript";
 
 const initialState = {
   sender: "",
@@ -16,7 +16,7 @@ const initialState = {
 export default function Home() {
 const fileRef = useRef<HTMLInputElement | null >(null) ;
 const submitButtonRef= useRef<HTMLButtonElement | null>(null) ;
-const [state, formAction] = useFormState(transcript, initialState)
+const [state, formAction] = useActionState(transcript, initialState)
 
 const uploadAudio = (blob: Blob ) => {
 
