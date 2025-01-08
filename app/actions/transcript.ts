@@ -9,6 +9,9 @@ import { ChatCompletionCreateParamsNonStreaming } from "openai/resources/index.m
 async function transcript(prevState: any, formData: FormData) {
   console.log("PREVIOUS STATE:", prevState); 
 
+  const id = Math.random().toString(36)
+
+
   if (
     process.env.AZURE_OPENAI_API_KEY === undefined || 
     process.env.AZURE_OPENAI_ENDPOINT === undefined ||
@@ -70,7 +73,12 @@ async function transcript(prevState: any, formData: FormData) {
         
   });
   
-  console.log(response.choices[0].message);
+  console.log(response.choices[0].message.content);
+  return{
+    sender: result1.text,
+    response: response,
+    id,  
+  }
 //   const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // const genAI = new GoogleGenerativeAI(process.env.API_KEY);

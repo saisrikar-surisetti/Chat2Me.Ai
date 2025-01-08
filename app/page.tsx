@@ -3,7 +3,7 @@ import Image from "next/image";
 import { SettingsIcon } from "lucide-react";
 import Messages from "./components/messages";
 import Recorder, { mimeType } from "./components/recorder";
-import { useActionState, useRef } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { useFormState } from "react-dom";
 import transcript from "@/app/actions/transcript";
 import { redirect } from "next/navigation";
@@ -14,14 +14,33 @@ const initialState = {
   id:"",
 }
 
+export type Message = {
+  sender: string;
+  response: string;
+  id: string;
+
+}
+
 export default function Home() {
 const fileRef = useRef<HTMLInputElement | null >(null) ;
 const submitButtonRef= useRef<HTMLButtonElement | null>(null) ;
-const [state, formAction] = useActionState(transcript, initialState)
+const [state, formAction] = useFormState(transcript, initialState)
+const [messages, setMessages] = useState<Message[]>([])
+
+useEffect(() => {
+if (state.response && state.sender){
+  setMessages((messages) => [
+    {
+      sender: state.sender || "",
+      response: state.response || "",
+      id: state.id || "",
+    },
+    ...messages,
+  ])
+} 
+}, [state])
 
 const uploadAudio = (blob: Blob ) => {
-
-
 const file = new File([blob],"audio.webm", {type: mimeType })
 
 //set the file as the value of the hidden file input feild 
