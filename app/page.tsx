@@ -89,7 +89,7 @@ const clickHandler = ()=> {
     <button type="submit" hidden ref={submitButtonRef}/>
     <div className="fixed bottom-0 w-full overflow-hidden rounded-3xl">
       <Recorder  uploadAudio={uploadAudio}/>
-      {/* voice synthesiser */}
+      {/* voice synthesiser havnt done yet but next thing*/}
       <div>
 
       </div>
