@@ -50,15 +50,15 @@ async function transcript(prevState: any, formData: FormData) {
     new AzureKeyCredential(process.env.AZURE_OPENAI_API_KEY)
   );
 
-  const result1 = await client.getAudioTranscription(
+  const result = await client.getAudioTranscription(
     process.env.AZURE_DEPLOYMENT_NAME,
     audio
   );
-  console.log(`Transcription: ${result1.text}`);
+  console.log(`Transcription: ${result.text}`);
 
   const openai = new OpenAI();
   
-  const response = await openai.chat.completions.create({
+  const completions = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
 
@@ -67,18 +67,15 @@ async function transcript(prevState: any, formData: FormData) {
           content: "You are a very helpful human assistant. You will answer questions and if you can't reply, you say that you dont know the awnser. "
         },
         {role: "user",
-          content: result1.text,
+          content: result.text,
         },
         ],
         
   });
   
-  console.log(response.choices[0].message.content);
-  return{
-    sender: result1.text,
-    response: response,
-    id,  
-  }
+const response = completions.choices[0].message?.content
+
+console.log("chatbot: ", completions.choices[0].message?.content);
 //   const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // const genAI = new GoogleGenerativeAI(process.env.API_KEY);
@@ -107,15 +104,11 @@ async function transcript(prevState: any, formData: FormData) {
 // console.log(prevState, "+++", result.text)
 
 
+return {
+  sender: result.text,
+  response: response,
+  id: id,
+};
 }
-
-  
-
-
-
-  
-  
- 
-
 
 export default transcript;

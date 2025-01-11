@@ -11,34 +11,35 @@ import { redirect } from "next/navigation";
 const initialState = {
   sender: "",
   response: "",
-  id:"",
+  id: "",
 }
 
 export type Message = {
   sender: string;
   response: string;
   id: string;
-
 }
 
 export default function Home() {
-const fileRef = useRef<HTMLInputElement | null >(null) ;
-const submitButtonRef= useRef<HTMLButtonElement | null>(null) ;
-const [state, formAction] = useFormState(transcript, initialState)
-const [messages, setMessages] = useState<Message[]>([])
+  const [state, formAction] = useFormState(transcript, initialState);
+  const fileRef = useRef<HTMLInputElement | null>(null);
+  const submitButtonRef = useRef<HTMLButtonElement | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [displaySettings, setDisplaySettings] = useState(false);
 
-useEffect(() => {
-if (state.response && state.sender){
-  setMessages((messages) => [
-    {
-      sender: state.sender || "",
-      response: state.response || "",
-      id: state.id || "",
-    },
-    ...messages,
-  ])
-} 
-}, [state])
+  // Responsible for updating the messages when the Server Action completes
+  useEffect(() => {
+    if (state.response && state.sender) {
+      setMessages((messages) => [
+        {
+          sender: state.sender || "",
+          response: state.response || "",
+          id: state.id || "",
+        },
+        ...messages,
+      ]);
+    }
+  }, [state]);
 
 const uploadAudio = (blob: Blob ) => {
 const file = new File([blob],"audio.webm", {type: mimeType })
